@@ -23,7 +23,6 @@ public class PostfixCalculator{
     }
     //Method to convert infix to postfix
     static String In_to_Post(String Q){
-        System.out.println("Infix Expression = " + Q);  //To display the infix expression
         Q = Q + ')';  //Adding ')' at end of infix
         String P = "";  //creating empty string to store Postfix expression
         Stack<Character> stack = new Stack<>();  //creating Stack object
@@ -61,7 +60,7 @@ public class PostfixCalculator{
             }
             i++;  //increamenting counter
         }
-        return Postfix_Evl(P); //calling postfix evaluation method
+        return P; //calling postfix evaluation method
     }
     static String Postfix_Evl(String P){
         Stack<Integer> stk = new Stack<>();  //object for stack class
@@ -116,52 +115,59 @@ public class PostfixCalculator{
                 }i++;
             }
         }
-        String value = ""+stk.pop(); //converting from int to string and Storing final value after evaluation
+        /* converting from int to string and 
+        Storing final value after evaluation*/
+        String value = ""+stk.pop();
         return value;   
     }
 }
 class Evaluator extends Frame implements ActionListener{    
     Button calculate,clearAll; 
-    JLabel L1,L2,L3;
-    JTextField infix,postfix; 
+    JLabel L1,L2,L3,L4;
+    JTextField infix,postfix,result; 
     public Evaluator(){
         /* Using labels to print text on GUI */
         L1 = new JLabel("Enter the Infix Expression:");
         L1.setBounds(20, 80, 200, 30);
-        L2 = new JLabel("After Postfix Evaluation: ");
-        L2.setBounds(20,200,140,30);
-        L3 = new JLabel("Result ");
-        L3.setBounds(20,240,100,30);
+        L2 = new JLabel("Infix converted to Postfix: ");
+        L2.setBounds(20,220,200,30);
+        L3 = new JLabel("After Postfix Evaluation: ");
+        L3.setBounds(20,280,140,30);
+        L4 = new JLabel("Result ");
+        L4.setBounds(20,320,100,30);
         /* Using Buttons to perform action on clicking */
         calculate = new Button("Calculate");
         calculate.setBounds(120,170,200,30);
         calculate.addActionListener(this);
         clearAll = new Button("Clear");
-        clearAll.setBounds(120,300,140,30);
+        clearAll.setBounds(140,380,140,30);
         clearAll.addActionListener(this);
         /* Using textField to take input and print output */
         infix = new JTextField();
         infix.setBounds(120, 120, 200, 30);
         postfix = new JTextField();
-        postfix.setBounds(120, 240, 140, 30);
+        postfix.setBounds(120, 250, 200, 30);
+        result = new JTextField();
+        result.setBounds(140, 320, 140, 30);
         /* Creating border around text field */
         Border bord = BorderFactory.createLineBorder(Color.BLACK, 3);
         infix.setBorder(bord);
         postfix.setBorder(bord);
+        result.setBorder(bord);
         /* Adding all elements on frame */
-        add(L1);add(L2);add(L3);
+        add(L1);add(L2);add(L3);add(L4);
         add(calculate);add(clearAll);
-        add(infix);add(postfix);
+        add(infix);add(postfix);add(result);
         /*setting Frame*/
         setBackground(Color.pink);
-        setSize(500,500);
+        setSize(450,450);
         setLayout(null);
         setVisible(true);
         setTitle("Postfix_Calculator");
     }
     /* method to clear every thing on text fields*/
     public void clearAll(){
-        JTextField[] list = {infix,postfix};
+        JTextField[] list = {infix,postfix,result};
         for(JTextField field : list){
             field.setText("");
         }
@@ -171,8 +177,12 @@ class Evaluator extends Frame implements ActionListener{
         String str = e.getActionCommand(); //to get what button is pressed
         if(str.equals("Calculate")){  //if calculate button is pressed
             String inf = infix.getText(); //getting input from first field
-            String post = PostfixCalculator.In_to_Post(inf); //calling evaluation methods and storing its data
+            //calling evaluation methods and storing its data
+            String post = PostfixCalculator.In_to_Post(inf); 
             postfix.setText(post); //printing the stored data on second text field
+            
+            String Result = PostfixCalculator.Postfix_Evl(post);
+            result.setText(Result);
         }
         else if(str.equals("Clear")){
             clearAll();  //calling clear method
